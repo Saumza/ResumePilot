@@ -13,7 +13,7 @@ datasource db {
 }
 
 model User {
-  id                String             @id @default(uuid())
+  id                String             @id @default(uuid()) @db.Uuid
   name              String
   email             String             @unique @db.VarChar(50)
   password          String?
@@ -22,7 +22,7 @@ model User {
   skills            Skill[]
   experiences       Experience[]
   githubUrl         String?
-  linkdinUrl        String
+  linkdinUrl        String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
   education         Education[]
@@ -34,8 +34,8 @@ model User {
 }
 
 model Skill {
-  id        String    @id @default(uuid())
-  userId    String
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @db.Uuid
   user      User      @relation(fields: [userId], references: [id])
   skillName String    @db.VarChar(20)
   skillType SkillType
@@ -52,8 +52,8 @@ enum SkillType {
 }
 
 model Experience {
-  id                     String                  @id @default(uuid())
-  userId                 String
+  id                     String                  @id @default(uuid()) @db.Uuid
+  userId                 String                  @db.Uuid
   user                   User                    @relation(fields: [userId], references: [id])
   companyName            String                  @db.VarChar(50)
   title                  String                  @db.VarChar(40)
@@ -67,8 +67,8 @@ model Experience {
 }
 
 model ExperienceDescription {
-  id              String     @id @default(uuid())
-  experienceId    String
+  id              String     @id @default(uuid()) @db.Uuid
+  experienceId    String     @db.Uuid
   experience      Experience @relation(fields: [experienceId], references: [id])
   descriptionText String     @db.VarBit(300)
   displayOrder    Int
@@ -84,8 +84,8 @@ enum EmploymentType {
 }
 
 model Education {
-  id           String    @id @default(uuid())
-  userId       String
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @db.Uuid
   user         User      @relation(fields: [userId], references: [id])
   instituition String    @db.VarChar(50)
   degree       String    @db.VarChar(30)
@@ -98,8 +98,8 @@ model Education {
 }
 
 model Job {
-  id                String             @id @default(uuid())
-  externalJobId     String
+  id                String             @id @default(uuid()) @db.Uuid
+  externalJobId     String             
   companyName       String             @db.VarChar(50)
   title             String             @db.VarChar(30)
   description       Json
@@ -121,25 +121,25 @@ enum JobType {
 }
 
 model SavedJobs {
-  id               String   @id @default(uuid())
-  jobId            String
+  id               String   @id @default(uuid()) @db.Uuid
+  jobId            String   @db.Uuid
   job              Job      @relation(fields: [jobId], references: [id])
-  userId           String
+  userId           String   @db.Uuid
   user             User     @relation(fields: [userId], references: [id])
   isResumeTailored Boolean  @default(false)
   savedAt          DateTime @default(now())
 }
 
 model Application {
-  id               String           @id @default(uuid())
-  userId           String
+  id               String           @id @default(uuid()) @db.Uuid
+  userId           String           @db.Uuid
   user             User             @relation(fields: [userId], references: [id])
-  jobId            String
+  jobId            String           @db.Uuid
   job              Job              @relation(fields: [jobId], references: [id])
   status           Status
-  resumeId         String
+  resumeId         String           @db.Uuid
   aiTailoredResume AiTailoredResume @relation(fields: [resumeId], references: [id])
-  coverLetterId    String
+  coverLetterId    String           @db.Uuid
   coverLetter      CoverLetter      @relation(fields: [coverLetterId], references: [id])
   appliedAt        DateTime         @default(now())
 }
@@ -152,10 +152,11 @@ enum Status {
 }
 
 model NormalResume {
-  id                String             @id @default(uuid())
+  id                String             @id @default(uuid()) @db.Uuid
   name              String?
-  ownerId           String
+  ownerId           String             @db.Uuid
   user              User               @relation(fields: [ownerId], references: [id])
+  rawText           String             @db.VarChar(600)
   resumeUrl         String
   aiReviewed        Boolean            @default(false)
   aiInsights        Json?
@@ -166,13 +167,13 @@ model NormalResume {
 }
 
 model AiTailoredResume {
-  id               String        @id @default(uuid())
+  id               String        @id @default(uuid()) @db.Uuid
   name             String?       @db.VarChar(20)
-  ownerId          String
+  ownerId          String        @db.Uuid
   user             User          @relation(fields: [ownerId], references: [id])
-  jobId            String
+  jobId            String        @db.Uuid
   job              Job           @relation(fields: [jobId], references: [id])
-  originalResumeId String
+  originalResumeId String        @db.Uuid
   normalResume     NormalResume  @relation(fields: [originalResumeId], references: [id])
   resumeUrl        String
   aiInsights       Json?
@@ -183,10 +184,10 @@ model AiTailoredResume {
 }
 
 model CoverLetter {
-  id             String        @id @default(uuid())
-  ownerId        String
+  id             String        @id @default(uuid()) @db.Uuid
+  ownerId        String        @db.Uuid
   user           User          @relation(fields: [ownerId], references: [id])
-  jobId          String
+  jobId          String        @db.Uuid
   job            Job           @relation(fields: [jobId], references: [id])
   coverLetterUrl String
   createdAt      DateTime      @default(now())

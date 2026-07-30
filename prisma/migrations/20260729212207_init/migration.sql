@@ -12,14 +12,14 @@ CREATE TYPE "Status" AS ENUM ('Applied', 'Interview', 'Offer', 'Close');
 
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT NOT NULL,
     "email" VARCHAR(50) NOT NULL,
     "password" TEXT,
     "emailVerified" BOOLEAN NOT NULL DEFAULT false,
     "refreshToken" TEXT,
     "githubUrl" TEXT,
-    "linkdinUrl" TEXT NOT NULL,
+    "linkdinUrl" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -28,8 +28,8 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "Skill" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "skillName" VARCHAR(20) NOT NULL,
     "skillType" "SkillType" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -40,8 +40,8 @@ CREATE TABLE "Skill" (
 
 -- CreateTable
 CREATE TABLE "Experience" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "companyName" VARCHAR(50) NOT NULL,
     "title" VARCHAR(40) NOT NULL,
     "employmentType" "EmploymentType" NOT NULL,
@@ -56,8 +56,8 @@ CREATE TABLE "Experience" (
 
 -- CreateTable
 CREATE TABLE "ExperienceDescription" (
-    "id" TEXT NOT NULL,
-    "experienceId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "experienceId" UUID NOT NULL,
     "descriptionText" VARBIT(300) NOT NULL,
     "displayOrder" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -68,8 +68,8 @@ CREATE TABLE "ExperienceDescription" (
 
 -- CreateTable
 CREATE TABLE "Education" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "instituition" VARCHAR(50) NOT NULL,
     "degree" VARCHAR(30) NOT NULL,
     "fieldOfStudy" VARCHAR(30) NOT NULL,
@@ -84,7 +84,7 @@ CREATE TABLE "Education" (
 
 -- CreateTable
 CREATE TABLE "Job" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "externalJobId" TEXT NOT NULL,
     "companyName" VARCHAR(50) NOT NULL,
     "title" VARCHAR(30) NOT NULL,
@@ -100,9 +100,9 @@ CREATE TABLE "Job" (
 
 -- CreateTable
 CREATE TABLE "SavedJobs" (
-    "id" TEXT NOT NULL,
-    "jobId" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "jobId" UUID NOT NULL,
+    "userId" UUID NOT NULL,
     "isResumeTailored" BOOLEAN NOT NULL DEFAULT false,
     "savedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -111,12 +111,12 @@ CREATE TABLE "SavedJobs" (
 
 -- CreateTable
 CREATE TABLE "Application" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "jobId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "userId" UUID NOT NULL,
+    "jobId" UUID NOT NULL,
     "status" "Status" NOT NULL,
-    "resumeId" TEXT NOT NULL,
-    "coverLetterId" TEXT NOT NULL,
+    "resumeId" UUID NOT NULL,
+    "coverLetterId" UUID NOT NULL,
     "appliedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Application_pkey" PRIMARY KEY ("id")
@@ -124,9 +124,10 @@ CREATE TABLE "Application" (
 
 -- CreateTable
 CREATE TABLE "NormalResume" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" TEXT,
-    "ownerId" TEXT NOT NULL,
+    "ownerId" UUID NOT NULL,
+    "rawText" VARCHAR(600) NOT NULL,
     "resumeUrl" TEXT NOT NULL,
     "aiReviewed" BOOLEAN NOT NULL DEFAULT false,
     "aiInsights" JSONB,
@@ -139,11 +140,11 @@ CREATE TABLE "NormalResume" (
 
 -- CreateTable
 CREATE TABLE "AiTailoredResume" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "name" VARCHAR(20),
-    "ownerId" TEXT NOT NULL,
-    "jobId" TEXT NOT NULL,
-    "originalResumeId" TEXT NOT NULL,
+    "ownerId" UUID NOT NULL,
+    "jobId" UUID NOT NULL,
+    "originalResumeId" UUID NOT NULL,
     "resumeUrl" TEXT NOT NULL,
     "aiInsights" JSONB,
     "atsScore" INTEGER,
@@ -155,9 +156,9 @@ CREATE TABLE "AiTailoredResume" (
 
 -- CreateTable
 CREATE TABLE "CoverLetter" (
-    "id" TEXT NOT NULL,
-    "ownerId" TEXT NOT NULL,
-    "jobId" TEXT NOT NULL,
+    "id" UUID NOT NULL,
+    "ownerId" UUID NOT NULL,
+    "jobId" UUID NOT NULL,
     "coverLetterUrl" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

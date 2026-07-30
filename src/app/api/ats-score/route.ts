@@ -4,44 +4,53 @@ import { prisma } from "@/lib/prisma"
 import { ApiError } from "@/utils/ApiError"
 import { ApiResponse } from "@/utils/ApiResponse"
 import { asyncHandler } from "@/utils/asyncHandler"
-import { pdfValidation } from "@/validations/resume.validation"
+import { pdfValidation, resumeIdCheck } from "@/validations/resume.validation"
 import { NextResponse } from "next/server"
 import { z } from "zod"
 
 
 export const POST = asyncHandler(async (request: Request) => {
 
-    const formData = await request.formData()
-    const file = formData.get("file") as File | null
+    const { resumeId } = await request.json()
 
-    if (file?.size === 0) {
-        throw new ApiError(404, "Pdf file is Required")
+    const verifyResumeId = {
+        resumeId
     }
 
-    const result = pdfValidation.safeParse(file)
-
+    const result = resumeIdCheck.safeParse(verifyResumeId)
     if (!result.success) {
-        const error = z.treeifyError(result.error)
-        throw new ApiError(404, error.errors[0])
+        const codeError = z.treeifyError(result.error)
+        throw new ApiError(404, codeError.properties?.resumeId?.errors[0] || "Id Not Found")
     }
 
-    const bytes = await result.data.arrayBuffer()
-    const pdfData = Buffer.from(bytes)
+    const checkedResumeId = result.data.resumeId
 
-    const text = await parsePdf(pdfData)
+    const findResume = await prisma.normalResume.findFirst({
+        where: { id: checkedResumeId }
+    })
 
-    if (!text || text.length === 0) {
-        throw new ApiError(400, "PDF is either empty or appears to be scanned. Please upload text-based PDF")
+    if (!findResume) {
+        throw new ApiError(404, "Resume Doesn't Exist")
     }
-    const resumeInformation = text.split("\n")
 
-    const response = await atsScorer(resumeInformation)
+    const resumeInfo = JSON.parse(findResume.rawText)
+
+    const response = await atsScorer(resumeInfo)
 
     const parsedData = JSON.parse(response)
 
-    // only two steps left one is to store the file in cloudinary and the other is to store data's in the DB and for that I need the user Data. 
+    const reviewedResumeData = await prisma.normalResume.update({
+        where: {
+            id: checkedResumeId
+        },
+        data: {
+            atsScore: parsedData.overallScore,
+            aiInsights: parsedData.sections,
+            aiReviewed: true
+        }
+    })
 
     return NextResponse.json(
-        new ApiResponse(201, parsedData, "Parsed Text Successfully")
+        new ApiResponse(201, reviewedResumeData, "Parsed Text Successfully")
     )
 })

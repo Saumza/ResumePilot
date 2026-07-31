@@ -17,20 +17,50 @@ model User {
   name              String
   email             String             @unique @db.VarChar(50)
   password          String?
-  emailVerified     Boolean            @default(false)
+  emailVerified     DateTime?
+  isOnboarded       Boolean            @default(false)
   refreshToken      String?
-  skills            Skill[]
-  experiences       Experience[]
+  image             String?
   githubUrl         String?
   linkdinUrl        String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
+  skills            Skill[]
+  experiences       Experience[]
   education         Education[]
   savedJobs         SavedJobs[]
   applications      Application[]
   normalResumes     NormalResume[]
   aiTailoredResumes AiTailoredResume[]
   coverLetters      CoverLetter[]
+  accounts          Account[]
+  sessions          Session[]
+}
+
+model Account {
+  id                String  @id @default(uuid())
+  userId            String  @db.Uuid
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(uuid())
+  sessionToken String   @unique
+  userId       String   @db.Uuid
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Skill {
@@ -99,7 +129,7 @@ model Education {
 
 model Job {
   id                String             @id @default(uuid()) @db.Uuid
-  externalJobId     String             
+  externalJobId     String
   companyName       String             @db.VarChar(50)
   title             String             @db.VarChar(30)
   description       Json

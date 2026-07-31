@@ -34,7 +34,6 @@ export const POST = asyncHandler(async (request: Request) => {
     }
 
     const resumeInfo = JSON.parse(findResume.rawText)
-
     const response = await atsScorer(resumeInfo)
 
     const parsedData = JSON.parse(response)
@@ -49,6 +48,10 @@ export const POST = asyncHandler(async (request: Request) => {
             aiReviewed: true
         }
     })
+
+    if (!reviewedResumeData) {
+        throw new ApiError(400, "Error while updating Resume Data")
+    }
 
     return NextResponse.json(
         new ApiResponse(201, reviewedResumeData, "Parsed Text Successfully")

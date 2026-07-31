@@ -7,20 +7,26 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { uploadOnCloudinary } from "@/utils/cloudinary";
+import { getServerSession, User } from "next-auth";
+import { authOption } from "../auth/[...nextauth]/option";
 
 
 export const POST = asyncHandler(async (request: Request) => {
 
-    // TODO: 1. Get the userId and check if the token or session is valid or available
-    
+    const session = await getServerSession(authOption)
+    if (!session || session.user) {
+        throw new ApiError(401, "Session Unavailable. Login First")
+    }
+
+    const user: User = session?.user as User
+
     const formData = await request.formData()
     const file = formData.get("file") as File | null
-    
+
     if (file?.size === 0) {
         throw new ApiError(404, "Pdf file is Required")
     }
-    // TODO: 2. Check the type of the file if DOCX then another flow and if pdf the flow is already written
-    
+
     const result = pdfValidation.safeParse(file)
 
     if (!result.success) {
@@ -46,7 +52,7 @@ export const POST = asyncHandler(async (request: Request) => {
 
     const resume = await prisma.normalResume.create({
         data: {
-            ownerId: userId,
+            ownerId: user.id,
             rawText: stringResumeInfo,
             resumeUrl: resumeUpload.url
         }

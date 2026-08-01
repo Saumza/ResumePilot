@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-type RouteHandler = (request: Request, context: any) => Promise<Response> | Response
+type RouteHandler = (request: NextRequest, context: any) => Promise<Response> | Response
 
-export const asyncHandler = (requestHandler: RouteHandler) => async (request: Request, context: any) => {
+export const asyncHandler = (requestHandler: RouteHandler) => async (request: NextRequest, context: any) => {
     try {
         return await requestHandler(request, context)
     } catch (error: any) {

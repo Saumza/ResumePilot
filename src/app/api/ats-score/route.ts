@@ -6,12 +6,12 @@ import { ApiResponse } from "@/utils/ApiResponse"
 import { asyncHandler } from "@/utils/asyncHandler"
 import { pdfValidation, resumeIdCheck } from "@/validations/resume.validation"
 import { getServerSession, User } from "next-auth"
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { authOption } from "../auth/[...nextauth]/option"
 
 
-export const POST = asyncHandler(async (request: Request) => {
+export const POST = asyncHandler(async (request: NextRequest) => {
 
     const session = await getServerSession(authOption)
     if (!session || session.user) {

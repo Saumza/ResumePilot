@@ -21,9 +21,9 @@ export const authOption: NextAuthOptions = {
             }
         }),
     ],
-    pages: {
-        signIn: "/sign-in"
-    },
+    // pages: {
+    //     signIn: "/sign-in"
+    // },
     callbacks: {
         // write the signIn callback later for the OAuth Login for the Onboarding Page when for the 1st time signup users
 

@@ -5,11 +5,18 @@ import { ApiError } from "@/utils/ApiError"
 import { ApiResponse } from "@/utils/ApiResponse"
 import { asyncHandler } from "@/utils/asyncHandler"
 import { pdfValidation, resumeIdCheck } from "@/validations/resume.validation"
+import { getServerSession, User } from "next-auth"
 import { NextResponse } from "next/server"
 import { z } from "zod"
+import { authOption } from "../auth/[...nextauth]/option"
 
 
 export const POST = asyncHandler(async (request: Request) => {
+
+    const session = await getServerSession(authOption)
+    if (!session || session.user) {
+        throw new ApiError(401, "Session Unavailable. Login First")
+    }
 
     const { resumeId } = await request.json()
 
@@ -33,10 +40,20 @@ export const POST = asyncHandler(async (request: Request) => {
         throw new ApiError(404, "Resume Doesn't Exist")
     }
 
+    if (findResume.aiReviewed) {
+        throw new ApiError(409, "Resume is Already Reviewed!")
+    }
+
     const resumeInfo = JSON.parse(findResume.rawText)
     const response = await atsScorer(resumeInfo)
 
     const parsedData = JSON.parse(response)
+    const structuredData = {
+        "sections": parsedData.sections,
+        "topStrengths": parsedData.topStrengths,
+        "topIssues": parsedData.topIssues,
+        "scoringBreakdown": parsedData.scoringBreakdown
+    }
 
     const reviewedResumeData = await prisma.normalResume.update({
         where: {
@@ -44,7 +61,7 @@ export const POST = asyncHandler(async (request: Request) => {
         },
         data: {
             atsScore: parsedData.overallScore,
-            aiInsights: parsedData.sections,
+            aiInsights: structuredData,
             aiReviewed: true
         }
     })
@@ -54,6 +71,6 @@ export const POST = asyncHandler(async (request: Request) => {
     }
 
     return NextResponse.json(
-        new ApiResponse(201, reviewedResumeData, "Parsed Text Successfully")
+        new ApiResponse(201, reviewedResumeData, "Resume Reviewed Successfully")
     )
 })

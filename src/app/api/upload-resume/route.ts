@@ -48,7 +48,6 @@ export const POST = asyncHandler(async (request: Request) => {
 
     const resumeUpload = await uploadOnCloudinary(fileData)
 
-    // TODO: 3. add the userId just
 
     const resume = await prisma.normalResume.create({
         data: {

@@ -186,7 +186,7 @@ model NormalResume {
   name              String?
   ownerId           String             @db.Uuid
   user              User               @relation(fields: [ownerId], references: [id])
-  rawText           String             @db.VarChar(600)
+  rawText           String             @db.Text
   resumeUrl         String
   aiReviewed        Boolean            @default(false)
   aiInsights        Json?

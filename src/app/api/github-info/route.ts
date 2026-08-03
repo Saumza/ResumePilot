@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { ApiError } from "@/utils/ApiError";
 import { ApiResponse } from "@/utils/ApiResponse";
 import { asyncHandler } from "@/utils/asyncHandler";
-import { githubUsernameCheck } from "@/validations/github.validation";
+import { githubIdCheck, githubUsernameCheck } from "@/validations/github.validation";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod"
@@ -54,4 +54,39 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     }
 
     return NextResponse.json(new ApiResponse(200, gitData, "Data Fetched Successfully"))
+})
+
+
+export const DELETE = asyncHandler(async (request: NextRequest) => {
+
+    const session = await getServerSession(authOption)
+
+    if (!session || session.user) {
+        throw new ApiError(401, "Session Unavailable. Login First")
+    }
+
+    const user: User = session?.user as User
+
+    const { githubId } = await request.json()
+
+    const verifyGithubId = {
+        githubId
+    }
+
+    const result = githubIdCheck.safeParse(verifyGithubId)
+
+    if (!result.success) {
+        const codeError = z.treeifyError(result.error)
+        throw new ApiError(400, codeError.properties?.githubId?.errors[0]!)
+    }
+
+    const gitUserData = result.data.githubId
+
+    await prisma.github.delete({
+        where: {
+            id: gitUserData
+        }
+    })
+
+    return NextResponse.json(new ApiResponse(200, true, "Record Deleted Successfully"))
 })

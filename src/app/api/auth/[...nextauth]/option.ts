@@ -20,12 +20,21 @@ export const authOption: NextAuthOptions = {
                 }
             }
         }),
+        GithubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID!,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+            authorization:{
+                params:{
+                    scope:"read:user user:email"
+                }
+            }
+        })
     ],
     // pages: {
     //     signIn: "/sign-in"
     // },
     callbacks: {
-        // write the signIn callback later for the OAuth Login for the Onboarding Page when for the 1st time signup users
+        // write the signIn callback later for the OAuth Login for the Onboarding Page when for the 1st time signup users and using account params in signin to check provider github and get the user github URL and save it in the DB. Either do it in signin callback or in the githubprovider profile callback and send back the details in objects like email:profile.email,etc.
 
         async session({ session, user }) {
             if (session.user) {

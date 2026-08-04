@@ -21,7 +21,6 @@ model User {
   isOnboarded       Boolean            @default(false)
   refreshToken      String?
   image             String?
-  githubUrl         String?
   linkdinUrl        String?
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -91,10 +90,10 @@ model Skill {
 }
 
 enum SkillType {
+  Language
   Framework
-  Languages
-  Platfrom
   Tool
+  Platform
   Domain
 }
 

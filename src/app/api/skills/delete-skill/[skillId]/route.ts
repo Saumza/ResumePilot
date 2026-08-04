@@ -4,12 +4,12 @@ import { asyncHandler } from "@/utils/asyncHandler";
 import { deleteSkillDataCheck } from "@/validations/skill.validation";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOption } from "../../auth/[...nextauth]/option";
+import { authOption } from "@/app/api/auth/[...nextauth]/option";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
 
-export const DELETE = (asyncHandler(async (req: NextRequest) => {
+export const DELETE = (asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ skillId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
@@ -17,7 +17,7 @@ export const DELETE = (asyncHandler(async (req: NextRequest) => {
         throw new ApiError(401, "User Not Available. Please Login First")
     }
 
-    const { skillId } = await req.json()
+    const { skillId } = await params
 
     const verifySkillId = {
         id: skillId

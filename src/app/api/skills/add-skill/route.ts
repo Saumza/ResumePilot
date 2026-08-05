@@ -12,13 +12,13 @@ import { SkillType } from "../../../../../generated/prisma/enums";
 
 export const POST = asyncHandler(async (req: NextRequest) => {
 
-    // const session = await getServerSession(authOption)
+    const session = await getServerSession(authOption)
 
-    // if (!session || session.user) {
-    //     throw new ApiError(401, "User Not Available. Please Login First")
-    // }
+    if (!session || session.user) {
+        throw new ApiError(401, "User Not Available. Please Login First")
+    }
 
-    // const user: User = session.user as User
+    const user: User = session.user as User
 
     const { skillName, skillType, userId } = await req.json()
 
@@ -30,8 +30,8 @@ export const POST = asyncHandler(async (req: NextRequest) => {
     const result = skillDataCheck.safeParse(verifyData)
 
     if (!result.success) {
-        const codeError = z.treeifyError(result.error)
-        throw new ApiError(400, codeError.properties)
+        const codeError = z.flattenError(result.error)
+        throw new ApiError(400, codeError.fieldErrors)
     }
 
     const { name, type } = result.data

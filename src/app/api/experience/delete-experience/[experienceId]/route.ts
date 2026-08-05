@@ -1,13 +1,15 @@
+import { authOption } from "@/app/api/auth/[...nextauth]/option";
+import { prisma } from "@/lib/prisma";
 import { ApiError } from "@/utils/ApiError";
 import { ApiResponse } from "@/utils/ApiResponse";
 import { asyncHandler } from "@/utils/asyncHandler";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOption } from "../../auth/[...nextauth]/option";
-import { prisma } from "@/lib/prisma";
 
 
-export const GET = (asyncHandler(async (req: NextRequest) => {
+export const DELETE = asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ experienceId: string }> }) => {
+
+    const { experienceId } = await params
 
     const session = await getServerSession(authOption)
 
@@ -17,15 +19,13 @@ export const GET = (asyncHandler(async (req: NextRequest) => {
 
     const user: User = session.user as User
 
-    const skillData = await prisma.skill.findMany({
+
+    await prisma.experience.delete({
         where: {
+            id: experienceId,
             userId: user.id
         }
     })
 
-    if (skillData.length === 0) {
-        return NextResponse.json(new ApiResponse(200, {}, "No skills available"))
-    }
-
-    return NextResponse.json(new ApiResponse(200, skillData, "Skill Fetched Successfully"))
-}))
+    return NextResponse.json(new ApiResponse(200, { success: true }, "Experience Deleted Successfully"))
+})

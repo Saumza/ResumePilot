@@ -9,7 +9,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
 
-export const DELETE = (asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ skillId: string }> }) => {
+export const DELETE = asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ skillId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
@@ -39,4 +39,4 @@ export const DELETE = (asyncHandler(async (req: NextRequest, { params }: { param
     })
 
     return NextResponse.json(new ApiResponse(200, { success: true }, "Skill Deleted Successfully"))
-}))
+})

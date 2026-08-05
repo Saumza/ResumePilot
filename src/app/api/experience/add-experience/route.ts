@@ -1,0 +1,55 @@
+import { prisma } from "@/lib/prisma";
+import { ApiError } from "@/utils/ApiError";
+import { ApiResponse } from "@/utils/ApiResponse";
+import { asyncHandler } from "@/utils/asyncHandler";
+import { addExperienceValidation } from "@/validations/experience.validation";
+import { NextRequest, NextResponse } from "next/server";
+import z from "zod";
+import { EmploymentType } from "../../../../../generated/prisma/enums";
+import { getServerSession, User } from "next-auth";
+import { authOption } from "../../auth/[...nextauth]/option";
+
+export const POST = asyncHandler(async (req: NextRequest) => {
+
+    const session = await getServerSession(authOption)
+
+    if (!session || session.user) {
+        throw new ApiError(401, "User Not Available. Please Login First")
+    }
+
+    const user: User = session.user as User
+
+    const { startDate, endDate, companyName, title, description, type } = await req.json()
+
+    const checkExperienceData = {
+        startYear: startDate,
+        endYear: endDate,
+        name: companyName,
+        companyTitle: title,
+        experienceDescription: description,
+        employmentType: type
+    }
+
+    const result = addExperienceValidation.safeParse(checkExperienceData)
+
+    if (!result.success) {
+        const codeError = z.flattenError(result.error)
+        throw new ApiError(400, codeError.fieldErrors)
+    }
+
+    const { startYear, endYear, name, companyTitle, experienceDescription, employmentType } = result.data
+
+    const data = await prisma.experience.create({
+        data: {
+            userId: user.id,
+            startDate: startYear,
+            endDate: endYear,
+            companyName: name,
+            title: companyTitle,
+            description: experienceDescription,
+            employmentType: employmentType as EmploymentType
+        }
+    })
+
+    return NextResponse.json(new ApiResponse(200, data, "Experience Added Successfully"))
+})

@@ -98,28 +98,18 @@ enum SkillType {
 }
 
 model Experience {
-  id                     String                  @id @default(uuid()) @db.Uuid
-  userId                 String                  @db.Uuid
-  user                   User                    @relation(fields: [userId], references: [id])
-  companyName            String                  @db.VarChar(50)
-  title                  String                  @db.VarChar(40)
-  experienceDescriptions ExperienceDescription[]
-  employmentType         EmploymentType
-  startDate              DateTime
-  endDate                DateTime?
-  isCurrent              Boolean                 @default(true)
-  createdAt              DateTime                @default(now())
-  updatedAt              DateTime                @updatedAt
-}
-
-model ExperienceDescription {
-  id              String     @id @default(uuid()) @db.Uuid
-  experienceId    String     @db.Uuid
-  experience      Experience @relation(fields: [experienceId], references: [id])
-  descriptionText String     @db.VarBit(300)
-  displayOrder    Int
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @updatedAt
+  id             String         @id @default(uuid()) @db.Uuid
+  userId         String         @db.Uuid
+  user           User           @relation(fields: [userId], references: [id])
+  companyName    String         @db.VarChar(50)
+  title          String         @db.VarChar(40)
+  employmentType EmploymentType
+  description    Json
+  startDate      Int
+  endDate        String?        
+  isCurrent      Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
 enum EmploymentType {

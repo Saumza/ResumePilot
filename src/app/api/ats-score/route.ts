@@ -18,7 +18,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         throw new ApiError(401, "Session Unavailable. Login First")
     }
 
-    const { resumeId } = await request.json()
+    const { resumeId, role, duration } = await request.json()
 
     const verifyResumeId = {
         resumeId
@@ -45,8 +45,8 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     }
 
     const resumeInfo = JSON.parse(findResume.rawText)
-    const response = await atsScorer(resumeInfo)
-
+    const response = await atsScorer(resumeInfo, role, duration)
+    
     const parsedData = JSON.parse(response)
     const structuredData = {
         "sections": parsedData.sections,

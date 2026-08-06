@@ -8,7 +8,7 @@ import { prisma } from "@/lib/prisma"
 import { z } from "zod"
 import { uploadOnCloudinary } from "@/utils/cloudinary";
 import { getServerSession, User } from "next-auth";
-import { authOption } from "../auth/[...nextauth]/option";
+import { authOption } from "../../auth/[...nextauth]/option";
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {

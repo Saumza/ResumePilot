@@ -106,7 +106,7 @@ model Experience {
   employmentType EmploymentType
   description    Json
   startDate      Int
-  endDate        String?        
+  endDate        String?
   isCurrent      Boolean        @default(true)
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
@@ -194,6 +194,7 @@ model NormalResume {
   user              User               @relation(fields: [ownerId], references: [id])
   rawText           String             @db.Text
   resumeUrl         String
+  publicId          String             @unique
   aiReviewed        Boolean            @default(false)
   aiInsights        Json?
   atsScore          Int?

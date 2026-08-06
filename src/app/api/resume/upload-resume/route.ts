@@ -53,7 +53,8 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         data: {
             ownerId: user.id,
             rawText: stringResumeInfo,
-            resumeUrl: resumeUpload.url
+            resumeUrl: resumeUpload.url,
+            publicId: resumeUpload.public_id
         }
     })
 

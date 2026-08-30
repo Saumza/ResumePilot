@@ -13,8 +13,20 @@ services:
       - POSTGRES_USER=resumePilotDB
       - POSTGRES_PASSWORD=resumePilotDB
 
-  adminer: 
+  adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - 6379:6379
+    command: [ "redis-server", "--appendonly", "yes" ]
+    volumes:
+      - "redis-data:/data"
+
+volumes:
+  redis-data:

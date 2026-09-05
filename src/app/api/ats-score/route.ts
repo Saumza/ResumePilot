@@ -9,6 +9,7 @@ import { getServerSession, User } from "next-auth"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
 import { authOption } from "../auth/[...nextauth]/option"
+import { atsInstructions, atsPrompt, role } from "@/lib/constants/ats.score"
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {
@@ -45,7 +46,11 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     }
 
     const resumeInfo = JSON.parse(findResume.rawText)
-    const response = await atsScorer(resumeInfo, role, duration)
+
+    const instruction = atsInstructions[role as role]
+    const prompt = atsPrompt(resumeInfo, role, duration)
+
+    const response = await atsScorer(instruction, prompt)
 
     const parsedData = JSON.parse(response)
     const structuredData = {

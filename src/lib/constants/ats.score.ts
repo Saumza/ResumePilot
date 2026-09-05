@@ -2,7 +2,7 @@ export type role = "Intern" | "Entry" | "Mid" | "Senior" | "Staff"
 
 
 export const atsInstructions = {
-    "Intern": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
+        "Intern": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
                 Listing the 8 criteria's for the for scoring with their exact weights and what to evaluate for each criteria:-
                 ATS Structure & Compatibility- 20 weight Evaluate whether the resume follows ATS-friendly formatting and structure. Verify the presence of standard section headings, assess whether the layout is easily parsable by Applicant Tracking Systems, and determine whether professional, readable fonts and formatting conventions are used. Identify any formatting elements that may prevent accurate ATS parsing and provide the weight with concise reasoning.
                 Work Experience- 5 weight Evaluate any internships, volunteer work, research, or part-time work. Assess whether responsibilities are clearly described, action verbs are used effectively, and contributions are explained. Do not heavily penalize limited professional experience.
@@ -123,7 +123,7 @@ export const atsInstructions = {
                 If any section that is written in the criteria is not provided score that section as 0.
                 If the user's resume's whole Information is same as the last request. Then send the same insights, scores everything same as last one.`,
 
-    "Entry": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
+        "Entry": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
                 Listing the 8 criteria's for the for scoring with their exact weights and what to evaluate for each criteria:-
                 ATS Structure & Compatibility- 18 weight Evaluate whether the resume follows ATS-friendly formatting and structure. Verify the presence of standard section headings, assess whether the layout is easily parsable by Applicant Tracking Systems, and determine whether professional, readable fonts and formatting conventions are used. Identify any formatting elements that may prevent accurate ATS parsing and provide the weight with concise reasoning.
                 Work Experience- 10 weight Evaluate the quality of the work experience section. Assess whether responsibilities are clearly described, action verbs are used effectively, achievements are measurable and impactful, and formatting, dates, and verb tenses remain consistent throughout the section and provide the weight with concise reasoning.
@@ -244,7 +244,7 @@ export const atsInstructions = {
                 If any section that is written in the criteria is not provided score that section as 0.
                 If the user's resume's whole Information is same as the last request. Then send the same insights, scores everything same as last one.`,
 
-    "Mid": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
+        "Mid": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
                 Listing the 8 criteria's for the for scoring with their exact weights and what to evaluate for each criteria:-
                 ATS Structure & Compatibility- 16 weight Evaluate whether the resume follows ATS-friendly formatting and structure. Verify the presence of standard section headings, assess whether the layout is easily parsable by Applicant Tracking Systems, and determine whether professional, readable fonts and formatting conventions are used. Identify any formatting elements that may prevent accurate ATS parsing and provide the weight with concise reasoning.
                 Work Experience- 20 weight Evaluate the quality of the work experience section. Assess whether responsibilities are clearly described, achievements are measurable, career progression is evident, and technical contributions are well explained.
@@ -365,7 +365,7 @@ export const atsInstructions = {
                 If any section that is written in the criteria is not provided score that section as 0.
                 If the user's resume's whole Information is same as the last request. Then send the same insights, scores everything same as last one.`,
 
-    "Senior": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
+        "Senior": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
                 Listing the 8 criteria's for the for scoring with their exact weights and what to evaluate for each criteria:-
                 ATS Structure & Compatibility- 14 weight Evaluate whether the resume follows ATS-friendly formatting and structure. Verify the presence of standard section headings, assess whether the layout is easily parsable by Applicant Tracking Systems, and determine whether professional, readable fonts and formatting conventions are used. Identify any formatting elements that may prevent accurate ATS parsing and provide the weight with concise reasoning.
                 Work Experience- 28 weight Evaluate the quality of the work experience section. Assess whether responsibilities are clearly described, action verbs are used effectively, achievements are measurable and impactful, and formatting, dates, and verb tenses remain consistent throughout the section and provide the weight with concise reasoning.
@@ -486,7 +486,7 @@ export const atsInstructions = {
                 If any section that is written in the criteria is not provided score that section as 0.
                 If the user's resume's whole Information is same as the last request. Then send the same insights, scores everything same as last one.`,
 
-    "Staff": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
+        "Staff": `Here act as a strict ATS Scoring system. Be objective and harsh about the mistakes that the resume has. The target domain are tech roles only.
                 Listing the 8 criteria's for the for scoring with their exact weights and what to evaluate for each criteria:-
                 ATS Structure & Compatibility- 12 weight Evaluate whether the resume follows ATS-friendly formatting and structure. Verify the presence of standard section headings, assess whether the layout is easily parsable by Applicant Tracking Systems, and determine whether professional, readable fonts and formatting conventions are used. Identify any formatting elements that may prevent accurate ATS parsing and provide the weight with concise reasoning.
                 Work Experience- 35 weight Evaluate the work experience section with emphasis on leadership, ownership, architectural contributions, mentoring, cross-functional collaboration, business impact, and measurable achievements. Do not focus solely on task descriptions.
@@ -606,4 +606,11 @@ export const atsInstructions = {
                 JSON Format { "error": "Resume does not appear to be tech related" }
                 If any section that is written in the criteria is not provided score that section as 0.
                 If the user's resume's whole Information is same as the last request. Then send the same insights, scores everything same as last one.`,
+}
+
+export const atsPrompt = (resumeInformation: string[], role: string, duration: string) => {
+        return `Evaluate the following resume for the target role: ${role}.
+                The candidate has ${duration} years of experience.
+                Adjust evaluation expectations accordingly for this experience level.
+                This is the user's Resume's Information ${resumeInformation}.`
 }

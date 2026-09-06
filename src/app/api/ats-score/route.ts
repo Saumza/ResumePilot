@@ -1,4 +1,4 @@
-import { atsScorer } from "@/helpers/googleAi"
+import { aiApi} from "@/helpers/googleAi"
 import { parsePdf } from "@/helpers/pdfParse"
 import { prisma } from "@/lib/prisma"
 import { ApiError } from "@/utils/ApiError"
@@ -50,7 +50,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     const instruction = atsInstructions[role as role]
     const prompt = atsPrompt(resumeInfo, role, duration)
 
-    const response = await atsScorer(instruction, prompt)
+    const response = await aiApi(instruction, prompt)
 
     const parsedData = JSON.parse(response)
     const structuredData = {

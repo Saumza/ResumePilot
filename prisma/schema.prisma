@@ -208,11 +208,12 @@ model AiTailoredResume {
   name             String?       @db.VarChar(20)
   ownerId          String        @db.Uuid
   user             User          @relation(fields: [ownerId], references: [id])
-  jobId            String        @db.Uuid
-  job              Job           @relation(fields: [jobId], references: [id])
+  jobId            String?       @db.Uuid
+  job              Job?          @relation(fields: [jobId], references: [id])
+  jobDescription   String?
   originalResumeId String        @db.Uuid
   normalResume     NormalResume  @relation(fields: [originalResumeId], references: [id])
-  resumeUrl        String
+  resumeData       Json
   aiInsights       Json?
   atsScore         Int?
   createdAt        DateTime      @default(now())

@@ -1,4 +1,4 @@
-import { aiApi} from "@/helpers/googleAi"
+import { aiApi } from "@/helpers/googleAi"
 import { parsePdf } from "@/helpers/pdfParse"
 import { prisma } from "@/lib/prisma"
 import { ApiError } from "@/utils/ApiError"
@@ -19,7 +19,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         throw new ApiError(401, "Session Unavailable. Login First")
     }
 
-    const { resumeId, role, duration } = await request.json()
+    const { resumeId, role, duration, targetRole } = await request.json()
 
     const verifyResumeId = {
         resumeId
@@ -47,8 +47,45 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const resumeInfo = JSON.parse(findResume.rawText)
 
-    const instruction = atsInstructions[role as role]
-    const prompt = atsPrompt(resumeInfo, role, duration)
+    let instruction
+    let prompt
+
+    if (targetRole) {
+        instruction = atsInstructions[role as role]
+        prompt = atsPrompt(resumeInfo, duration, targetRole)
+
+        const response = await aiApi(instruction, prompt)
+
+        const parsedData = JSON.parse(response)
+        const structuredData = {
+            "sections": parsedData.sections,
+            "topStrengths": parsedData.topStrengths,
+            "topIssues": parsedData.topIssues,
+            "scoringBreakdown": parsedData.scoringBreakdown
+        }
+
+        const reviewedResumeData = await prisma.normalResume.update({
+            where: {
+                id: checkedResumeId
+            },
+            data: {
+                atsScore: parsedData.overallScore,
+                aiInsights: structuredData,
+                aiReviewed: true
+            }
+        })
+
+        if (!reviewedResumeData) {
+            throw new ApiError(400, "Error while updating Resume Data")
+        }
+
+        return NextResponse.json(
+            new ApiResponse(201, reviewedResumeData, "Resume Reviewed Successfully")
+        )
+    }
+
+    instruction = atsInstructions[role as role]
+    prompt = atsPrompt(resumeInfo, role, duration)
 
     const response = await aiApi(instruction, prompt)
 

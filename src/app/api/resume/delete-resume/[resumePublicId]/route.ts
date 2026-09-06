@@ -13,7 +13,7 @@ export const DELETE = asyncHandler(async (req: NextRequest, { params }: { params
     const { resumePublicId } = await params
 
     const session = await getServerSession(authOption)
-    if (!session || session.user) {
+    if (!session || !session.user) {
         throw new ApiError(401, "User Not Available. Please Login First")
     }
 

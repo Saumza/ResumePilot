@@ -14,7 +14,7 @@ import { authOption } from "../../auth/[...nextauth]/option";
 export const POST = asyncHandler(async (request: NextRequest) => {
 
     const session = await getServerSession(authOption)
-    if (!session || session.user) {
+    if (!session || !session.user) {
         throw new ApiError(401, "Session Unavailable. Login First")
     }
 

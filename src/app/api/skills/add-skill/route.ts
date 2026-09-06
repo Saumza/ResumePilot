@@ -14,7 +14,7 @@ export const POST = asyncHandler(async (req: NextRequest) => {
 
     const session = await getServerSession(authOption)
 
-    if (!session || session.user) {
+    if (!session || !session.user) {
         throw new ApiError(401, "User Not Available. Please Login First")
     }
 

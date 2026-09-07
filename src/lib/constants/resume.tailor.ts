@@ -144,7 +144,8 @@ export const tailorInstructions =
                             {
                                 name: string,
                                 tech: [string, string, ...],
-                                bullets: [string, string, ...]
+                                bullets: [string, string, ...],
+                                url: string (optional)
                             }
                         ],
                     skills: {

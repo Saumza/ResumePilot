@@ -8,10 +8,10 @@ import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 
 
-export const DELETE = asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ resumePublicId: string }> }) => {
+export const DELETE = asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ resumeId: string }> }) => {
 
-    const { resumePublicId } = await params
-
+    const { resumeId } = await params
+    
     const session = await getServerSession(authOption)
     if (!session || !session.user) {
         throw new ApiError(401, "User Not Available. Please Login First")
@@ -19,14 +19,15 @@ export const DELETE = asyncHandler(async (req: NextRequest, { params }: { params
 
     const user: User = session.user as User
 
-    await deleteFromCloudinary(resumePublicId)
 
-    await prisma.normalResume.delete({
+    const resume = await prisma.normalResume.delete({
         where: {
-            ownerId: user.id,
-            publicId: resumePublicId
+            id: resumeId,
+            ownerId: user.id
         }
     })
+
+    await deleteFromCloudinary(resume.publicId)
 
     return NextResponse.json(new ApiResponse(200, { success: true }, "Resume Deleted Sucessfully"))
 

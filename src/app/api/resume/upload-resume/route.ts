@@ -9,6 +9,8 @@ import { z } from "zod"
 import { uploadOnCloudinary } from "@/utils/cloudinary";
 import { getServerSession, User } from "next-auth";
 import { authOption } from "../../auth/[...nextauth]/option";
+import { structurePrompt } from "@/lib/constants/resume.structure";
+import { aiApi } from "@/helpers/googleAi";
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {
@@ -48,7 +50,12 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const resumeUpload = await uploadOnCloudinary(fileData)
 
+    const prompt = structurePrompt(stringResumeInfo)
 
+    const response = await aiApi(prompt)
+
+    console.log(response)
+    
     const resume = await prisma.normalResume.create({
         data: {
             ownerId: user.id,

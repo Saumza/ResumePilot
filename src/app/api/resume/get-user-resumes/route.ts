@@ -5,7 +5,7 @@ import { asyncHandler } from "@/utils/asyncHandler";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authOption } from "../../auth/[...nextauth]/option";
-
+import { normalResume, tailoredResume } from "@/types/ResumeTypes"
 
 export const GET = asyncHandler(async (req: NextRequest) => {
 
@@ -17,16 +17,28 @@ export const GET = asyncHandler(async (req: NextRequest) => {
 
     const user: User = session.user as User
 
-    const data = await prisma.normalResume.findMany({
+    let allResumes: { normalResume?: normalResume[], tailoredResume?: tailoredResume[] } = {}
+
+    const normalResume = await prisma.normalResume.findMany({
         where: {
             ownerId: user.id
         }
     })
 
-    if (data.length === 0) {
-        return NextResponse.json(new ApiResponse(200, {}, "User doesn't have any Resume."))
+    if (normalResume.length !== 0) {
+        allResumes.normalResume = normalResume
     }
 
-    return NextResponse.json(new ApiResponse(200, data, "Fetched Resume Successfully"))
+    const aiTailoredResume = await prisma.aiTailoredResume.findMany({
+        where: {
+            ownerId: user.id
+        }
+    })
+
+    if (aiTailoredResume.length !== 0) {
+        allResumes.tailoredResume = aiTailoredResume
+    }
+
+    return NextResponse.json(new ApiResponse(200, allResumes, "Fetched Resume Successfully"))
 
 })

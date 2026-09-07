@@ -85,7 +85,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     }
 
     instruction = atsInstructions[role as role]
-    prompt = atsPrompt(resumeInfo, role, duration)
+    prompt = atsPrompt(resumeInfo, duration)
 
     const response = await aiApi(instruction, prompt)
 

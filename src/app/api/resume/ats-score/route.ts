@@ -8,7 +8,7 @@ import { pdfValidation, resumeIdCheck } from "@/validations/resume.validation"
 import { getServerSession, User } from "next-auth"
 import { NextRequest, NextResponse } from "next/server"
 import { z } from "zod"
-import { authOption } from "../auth/[...nextauth]/option"
+import { authOption } from "../../auth/[...nextauth]/option"
 import { atsInstructions, atsPrompt, role } from "@/lib/constants/ats.score"
 
 
@@ -40,12 +40,9 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     if (!findResume) {
         throw new ApiError(404, "Resume Doesn't Exist")
     }
-    // decide the flow whether one resume can be reviewed multiple times by creating changes in the resume data in the canvas inside the website application, if this is the flow then cancel this single review feature. And if not like there is no canvas for the resume data in the website and the changes will be done by the user outside the application and then added again for ATS Score then yes keep this feature.
-    if (findResume.aiReviewed) {
-        throw new ApiError(409, "Resume is Already Reviewed!")
-    }
 
-    const resumeInfo = JSON.parse(findResume.rawText)
+
+    const resumeInfo = JSON.stringify(findResume.resumeText)
 
     let instruction
     let prompt
@@ -90,6 +87,11 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     const response = await aiApi(instruction, prompt)
 
     const parsedData = JSON.parse(response)
+
+    if (parsedData.error) {
+        throw new ApiError(400, parsedData.error)
+    }
+
     const structuredData = {
         "sections": parsedData.sections,
         "topStrengths": parsedData.topStrengths,

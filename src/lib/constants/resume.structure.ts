@@ -1,6 +1,6 @@
 export const structurePrompt = (resumeInformation: string) => {
     return `This resume is in plain text format: ${resumeInformation}.
-    Parse and structure it into the following json.
+    Parse and structure it strictly into the following json format.
     {
         personalInformation:{
                         name:  string,
@@ -10,7 +10,7 @@ export const structurePrompt = (resumeInformation: string) => {
                         github:  string (github url optional if provided by the user)
                         },
         summary: "string | null" (optional if provide by user), 
-        "education": [
+        education: [
                         {
                         "institution": "string",
                         "degree": "string",

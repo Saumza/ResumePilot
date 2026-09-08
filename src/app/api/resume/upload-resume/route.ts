@@ -9,8 +9,7 @@ import { z } from "zod"
 import { uploadOnCloudinary } from "@/utils/cloudinary";
 import { getServerSession, User } from "next-auth";
 import { authOption } from "../../auth/[...nextauth]/option";
-import { structurePrompt } from "@/lib/constants/resume.structure";
-import { aiApi } from "@/helpers/googleAi";
+import { textToJson } from "@/helpers/pdfTextToJson";
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {
@@ -24,7 +23,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const formData = await request.formData()
     const file = formData.get("file") as File | null
-
+    const userId = formData.get("userId") as string
     if (file?.size === 0) {
         throw new ApiError(404, "Pdf file is Required")
     }
@@ -45,21 +44,14 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         throw new ApiError(400, "PDF is either empty or appears to be scanned. Please upload text-based PDF")
     }
 
-    const resumeInformation = text.split("\n")
-    const stringResumeInfo = JSON.stringify(resumeInformation)
-
     const resumeUpload = await uploadOnCloudinary(fileData)
 
-    const prompt = structurePrompt(stringResumeInfo)
+    const resumeData = await textToJson(text)
 
-    const response = await aiApi(prompt)
-
-    console.log(response)
-    
     const resume = await prisma.normalResume.create({
         data: {
-            ownerId: user.id,
-            rawText: stringResumeInfo,
+            ownerId: userId,
+            resumeText: resumeData,
             resumeUrl: resumeUpload.url,
             publicId: resumeUpload.public_id
         }

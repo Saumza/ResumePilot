@@ -608,7 +608,7 @@ export const atsInstructions = {
                 If the user's resume's whole Information is same as the last request. Then send the same insights, scores everything same as last one.`,
 }
 
-export const atsPrompt = (resumeInformation: string[], duration: string, targetRole?: string) => {
+export const atsPrompt = (resumeInformation: any, duration: string, targetRole?: string) => {
 
         if (targetRole) {
                 return `Evaluate the following resume for the target role: ${targetRole}.

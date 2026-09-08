@@ -22,3 +22,20 @@ export const textToJson = async (text: string) => {
         }
     }
 }
+
+
+export const aiTextToJson = (text: string) => {
+    try {
+        const firstIndex = text.indexOf("{")
+        const lastIndex = text.lastIndexOf("}")
+
+        const data = text.slice(firstIndex, lastIndex + 1)
+        const parsedResponse: Record<string, any> = JSON.parse(data)
+
+        return parsedResponse
+    } catch (error) {
+        if (error instanceof Error) {
+            throw new ApiError(500, error.message)
+        }
+    }
+}

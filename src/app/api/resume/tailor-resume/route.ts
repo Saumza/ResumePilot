@@ -9,6 +9,7 @@ import { authOption } from "../../auth/[...nextauth]/option";
 import { resumeTailor, resumeTailorwithDescription } from "@/validations/resumeTailoring.validation";
 import { tailorInstructions, tailorPrompt } from "@/lib/constants/resume.tailor";
 import { aiApi } from "@/helpers/googleAi";
+import { aiTextToJson } from "@/helpers/pdfTextToJson";
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {
@@ -50,16 +51,16 @@ export const POST = asyncHandler(async (request: NextRequest) => {
             throw new ApiError(404, "Resume Not Found")
         }
 
-        const resumeInfo = findResume.resumeText
+        const resumeInfo = JSON.stringify(findResume.resumeText)
 
         const instructions = tailorInstructions
         const prompt = tailorPrompt(resumeInfo, jobDescription)
 
         const response = await aiApi(instructions, prompt)
 
-        const parsedResponse = JSON.parse(response)
+        const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
 
-        const tailoredResume = { ...parsedResponse.modifiedSections, ...findResume.resumeText }
+        const tailoredResume = { ...findResume.resumeText as Record<string, any>, ...parsedResponse.modifiedSections, }
         const tailoredResumeUpload = await prisma.aiTailoredResume.create({
             data: {
                 ownerId: user.id,
@@ -101,7 +102,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         throw new ApiError(404, "Resume Not Found")
     }
 
-    const resumeInfo = findResume.resumeText
+    const resumeInfo = JSON.stringify(findResume.resumeText)
 
     const findJob = await prisma.job.findFirst({
         where: {
@@ -118,10 +119,10 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const response = await aiApi(instruction, prompt)
 
-    const parsedResponse = JSON.parse(response)
+    const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
 
 
-    const tailoredResume = { ...parsedResponse.modifiedSections, ...findResume.resumeText }
+    const tailoredResume = { ...findResume.resumeText as Record<string, any>, ...parsedResponse.modifiedSections }
     const tailoredResumeUpload = await prisma.aiTailoredResume.create({
         data: {
             ownerId: user.id,

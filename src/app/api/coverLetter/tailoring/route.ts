@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOption } from "../../auth/[...nextauth]/option";
 import { z } from "zod"
 import { coverLetterTailor } from "@/validations/coverLetter.validation";
-import { instructionsForDescriptions, role, tailorPrompt } from "@/lib/constants/coverLetter.tailor";
+import { instructionsForDescriptions, instructionsWithoutDescriptions, role, tailorPrompt, tailorPromptWithOutDescription } from "@/lib/constants/coverLetter.tailor";
 import { aiApi } from "@/helpers/googleAi";
 import { aiTextToJson } from "@/helpers/pdfTextToJson";
 import { prisma } from "@/lib/prisma";
@@ -32,29 +32,25 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     }
 
     const result = coverLetterTailor.safeParse(verifyValidation)
-
     if (!result.success) {
         const codeError = z.flattenError(result.error)
         throw new ApiError(400, codeError.fieldErrors)
     }
-
     const { resume_Id, company_Name, job_Position, letter_Tone } = result.data
+
 
     const findResume = await prisma.aiTailoredResume.findFirst({
         where: {
             id: resume_Id
         }
     })
-
     if (!findResume) {
         throw new ApiError(404, "Resume Doesn't Exist")
     }
-
     const resumeInformation = JSON.stringify(findResume.resumeData)
 
 
     if (jobDescription) {
-
         const instructions = instructionsForDescriptions[letter_Tone as role]
         const prompt = tailorPrompt(resumeInformation, jobDescription, job_Position, company_Name)
 
@@ -66,6 +62,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
                 ownerId: user.id,
                 jobDescription,
                 coverLetterData: parsedResponse.mainSection,
+                aiInsights: parsedResponse.tailoringNotes
             }
         })
 
@@ -74,39 +71,58 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         )
     }
 
-    if (!jobId) {
-        throw new ApiError(400, "JobId is Required")
+    else if (jobId) {
+        const findJob = await prisma.job.findFirst({
+            where: {
+                id: jobId
+            }
+        })
+
+        if (!findJob) {
+            throw new ApiError(404, "Job Not Available in the Records")
+        }
+
+        const description = JSON.stringify(findJob.description)
+
+        const instructions = instructionsForDescriptions[letter_Tone as role]
+        const prompt = tailorPrompt(resumeInformation, description, job_Position, company_Name)
+
+        const response = await aiApi(prompt, instructions)
+        const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
+
+        const uploadCoverLetter = await prisma.coverLetter.create({
+            data: {
+                ownerId: user.id,
+                jobDescription: description,
+                coverLetterData: parsedResponse.mainSection,
+                aiInsights: parsedResponse.tailoringNotes,
+                jobId
+            }
+        })
+
+        return NextResponse.json(
+            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully")
+        )
     }
 
+    else {
 
-    const findJob = await prisma.job.findFirst({
-        where: {
-            id: jobId
-        }
-    })
+        const instructions = instructionsWithoutDescriptions[letter_Tone as role]
+        const prompt = tailorPromptWithOutDescription(resumeInformation, job_Position, company_Name)
 
-    if (!findJob) {
-        throw new ApiError(404, "Job Not Available in the Records")
+        const response = await aiApi(prompt, instructions)
+        const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
+
+        const uploadCoverLetter = await prisma.coverLetter.create({
+            data: {
+                ownerId: "45fdf09e-824b-4bf8-abbd-5d5915bed02f",
+                coverLetterData: parsedResponse.mainSection,
+                aiInsights: parsedResponse.tailoringNotes,
+            }
+        })
+
+        return NextResponse.json(
+            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully")
+        )
     }
-
-    const description = JSON.stringify(findJob.description)
-
-    const instructions = instructionsForDescriptions[letter_Tone as role]
-    const prompt = tailorPrompt(resumeInformation, description, job_Position, company_Name)
-
-    const response = await aiApi(prompt, instructions)
-    const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
-
-    const uploadCoverLetter = await prisma.coverLetter.create({
-        data: {
-            ownerId: user.id,
-            jobDescription: description,
-            coverLetterData: parsedResponse.mainSection,
-            jobId
-        }
-    })
-
-    return NextResponse.json(
-        new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully")
-    )
 })

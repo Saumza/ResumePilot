@@ -231,8 +231,10 @@ model CoverLetter {
   user            User          @relation(fields: [ownerId], references: [id])
   jobId           String?       @db.Uuid
   job             Job?          @relation(fields: [jobId], references: [id])
+  name            String?
   jobDescription  String?
   coverLetterData Json
+  aiInsights      Json
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
   applications    Application[]

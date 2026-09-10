@@ -5,9 +5,9 @@ import { generateText } from "ai";
 export const aiApi = async ( prompt: string, instruction?: string,) => {
 
     const response = await generateText({
-        model: google("gemini-2.5-flash"),
+        model: google("gemma-4-31b-it"),
         instructions: instruction || undefined,
-        prompt
+        prompt,
     })
 
     return response.text

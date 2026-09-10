@@ -167,17 +167,20 @@ model SavedJobs {
 }
 
 model Application {
-  id               String           @id @default(uuid()) @db.Uuid
-  userId           String           @db.Uuid
-  user             User             @relation(fields: [userId], references: [id])
-  jobId            String           @db.Uuid
-  job              Job              @relation(fields: [jobId], references: [id])
+  id               String            @id @default(uuid()) @db.Uuid
+  userId           String            @db.Uuid
+  user             User              @relation(fields: [userId], references: [id])
+  jobId            String            @db.Uuid
+  job              Job               @relation(fields: [jobId], references: [id])
+  companyName      String
+  jobRole          String
+  jobUrl           String?
   status           Status
-  resumeId         String           @db.Uuid
-  aiTailoredResume AiTailoredResume @relation(fields: [resumeId], references: [id])
-  coverLetterId    String           @db.Uuid
-  coverLetter      CoverLetter      @relation(fields: [coverLetterId], references: [id])
-  appliedAt        DateTime         @default(now())
+  resumeId         String?           @db.Uuid
+  aiTailoredResume AiTailoredResume? @relation(fields: [resumeId], references: [id])
+  coverLetterId    String?           @db.Uuid
+  coverLetter      CoverLetter?      @relation(fields: [coverLetterId], references: [id])
+  appliedAt        DateTime          @default(now())
 }
 
 enum Status {
@@ -193,6 +196,7 @@ model NormalResume {
   ownerId           String             @db.Uuid
   user              User               @relation(fields: [ownerId], references: [id])
   resumeText        Json
+  rawText           String             @db.Text
   resumeUrl         String
   publicId          String             @unique
   aiReviewed        Boolean            @default(false)
@@ -212,7 +216,7 @@ model AiTailoredResume {
   job              Job?          @relation(fields: [jobId], references: [id])
   jobDescription   String?
   originalResumeId String        @db.Uuid
-  normalResume     NormalResume  @relation(fields: [originalResumeId], references: [id])
+  normalResume     NormalResume  @relation(fields: [originalResumeId], references: [id], onDelete: Cascade)
   resumeData       Json
   aiInsights       Json?
   atsScore         Int?
@@ -222,13 +226,14 @@ model AiTailoredResume {
 }
 
 model CoverLetter {
-  id             String        @id @default(uuid()) @db.Uuid
-  ownerId        String        @db.Uuid
-  user           User          @relation(fields: [ownerId], references: [id])
-  jobId          String        @db.Uuid
-  job            Job           @relation(fields: [jobId], references: [id])
-  coverLetterUrl String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  applications   Application[]
+  id              String        @id @default(uuid()) @db.Uuid
+  ownerId         String        @db.Uuid
+  user            User          @relation(fields: [ownerId], references: [id])
+  jobId           String?       @db.Uuid
+  job             Job?          @relation(fields: [jobId], references: [id])
+  jobDescription  String?
+  coverLetterData Json
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  applications    Application[]
 }

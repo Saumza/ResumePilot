@@ -23,7 +23,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const formData = await request.formData()
     const file = formData.get("file") as File | null
-    const userId = formData.get("userId") as string
+    
     if (file?.size === 0) {
         throw new ApiError(404, "Pdf file is Required")
     }
@@ -46,12 +46,16 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const resumeUpload = await uploadOnCloudinary(fileData)
 
+    const resumeInformation = text.split("\n")
+    const stringResumeInfo = JSON.stringify(resumeInformation)
+
     const resumeData = await textToJson(text)
 
     const resume = await prisma.normalResume.create({
         data: {
-            ownerId: userId,
+            ownerId: user.id,
             resumeText: resumeData,
+            rawText: stringResumeInfo,
             resumeUrl: resumeUpload.url,
             publicId: resumeUpload.public_id
         }

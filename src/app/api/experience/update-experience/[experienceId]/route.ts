@@ -5,11 +5,11 @@ import { asyncHandler } from "@/utils/asyncHandler";
 import { addExperienceValidation } from "@/validations/experience.validation";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
-import { EmploymentType } from "../../../../../generated/prisma/enums";
+import { EmploymentType } from "../../../../../../generated/prisma/enums";
 import { getServerSession, User } from "next-auth";
-import { authOption } from "../../auth/[...nextauth]/option";
+import { authOption } from "../../../auth/[...nextauth]/option";
 
-export const PUT = asyncHandler(async (req: NextRequest) => {
+export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ experienceId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
@@ -17,11 +17,10 @@ export const PUT = asyncHandler(async (req: NextRequest) => {
         throw new ApiError(401, "User Not Available. Please Login First")
     }
 
-    const { id, startDate, endDate, companyName, title, description, type } = await req.json()
+    const { startDate, endDate, companyName, title, description, type } = await req.json()
 
-    if (!id) {
-        throw new ApiError(400, "Experience Id Not Available")
-    }
+    const { experienceId } = await params
+
 
     const checkExperienceData = {
         startYear: startDate,
@@ -43,7 +42,7 @@ export const PUT = asyncHandler(async (req: NextRequest) => {
 
     const data = await prisma.experience.update({
         where: {
-            id
+            id: experienceId
         },
         data: {
             startDate: startYear,
@@ -51,7 +50,7 @@ export const PUT = asyncHandler(async (req: NextRequest) => {
             companyName: name,
             title: companyTitle,
             description: experienceDescription,
-            employmentType: employmentType as EmploymentType
+            employmentType: employmentType
         }
     })
 

@@ -3,11 +3,11 @@ import { ApiResponse } from "@/utils/ApiResponse";
 import { asyncHandler } from "@/utils/asyncHandler";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOption } from "../../auth/[...nextauth]/option";
+import { authOption } from "../../../auth/[...nextauth]/option";
 import { prisma } from "@/lib/prisma";
 
 
-export const PUT = asyncHandler(async (req: NextRequest) => {
+export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: Promise<{ resumeId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
@@ -17,10 +17,11 @@ export const PUT = asyncHandler(async (req: NextRequest) => {
 
     const user: User = session.user as User
 
-    const { resumeId, resumeName, type } = await req.json()
+    const { resumeId } = await params
+    const { resumeName, type } = await req.json()
 
-    if (!resumeId || !resumeName) {
-        throw new ApiError(400, "ResumeId and ResumeName both are required")
+    if (!resumeName || typeof (resumeName) !== "string") {
+        throw new ApiError(400, "ResumeName is required and must be of string type")
     }
 
 

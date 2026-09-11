@@ -1,13 +1,13 @@
 import { asyncHandler } from "@/utils/asyncHandler";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOption } from "../../auth/[...nextauth]/option";
+import { authOption } from "../../../auth/[...nextauth]/option";
 import { ApiError } from "@/utils/ApiError";
 import { prisma } from "@/lib/prisma";
 import { ApiResponse } from "@/utils/ApiResponse";
 
 
-export const PATCH = asyncHandler(async (request: NextRequest) => {
+export const PATCH = asyncHandler(async (request: NextRequest, { params }: { params: Promise<{ coverLetterId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
@@ -17,15 +17,17 @@ export const PATCH = asyncHandler(async (request: NextRequest) => {
 
     const user: User = session.user as User
 
-    const { coverLetterId, name } = await request.json()
+    const { name } = await request.json()
+    const { coverLetterId } = await params
 
-    if (!coverLetterId || !name) {
-        throw new ApiError(400, "Id and Name both are required.")
+    if (!name) {
+        throw new ApiError(400, "Name is required.")
     }
 
     const updateCoverLetter = await prisma.coverLetter.update({
         where: {
-            id: coverLetterId
+            id: coverLetterId,
+            ownerId: user.id
         },
         data: {
             name

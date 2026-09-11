@@ -3,10 +3,10 @@ import { ApiResponse } from "@/utils/ApiResponse";
 import { asyncHandler } from "@/utils/asyncHandler";
 import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { authOption } from "../../auth/[...nextauth]/option";
+import { authOption } from "../../../auth/[...nextauth]/option";
 import { prisma } from "@/lib/prisma";
 
-export const PUT = asyncHandler(async (request: NextRequest) => {
+export const PUT = asyncHandler(async (request: NextRequest, { params }: { params: Promise<{ resumeId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
@@ -16,9 +16,10 @@ export const PUT = asyncHandler(async (request: NextRequest) => {
 
     const user: User = session.user as User
 
-    const { resumeId, resumeData, type } = await request.json()
+    const { resumeId } = await params
+    const { resumeData, type } = await request.json()
 
-    if (Object.keys(resumeData).length === 0 || !resumeId) {
+    if (Object.keys(resumeData).length === 0) {
         throw new ApiError(400, "Resume Data and ResumeId  both are required")
     }
 

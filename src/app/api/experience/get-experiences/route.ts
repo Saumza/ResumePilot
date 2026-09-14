@@ -20,6 +20,9 @@ export const GET = asyncHandler(async (req: NextRequest) => {
     const experience = await prisma.experience.findMany({
         where: {
             userId: user.id
+        },
+        orderBy: {
+            updatedAt: "desc"
         }
     })
 

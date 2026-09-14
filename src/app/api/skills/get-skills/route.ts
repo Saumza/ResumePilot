@@ -20,6 +20,9 @@ export const GET = (asyncHandler(async (req: NextRequest) => {
     const skillData = await prisma.skill.findMany({
         where: {
             userId: user.id
+        },
+        orderBy: {
+            createdAt: "desc"
         }
     })
 

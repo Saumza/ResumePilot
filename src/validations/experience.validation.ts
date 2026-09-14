@@ -7,5 +7,6 @@ export const addExperienceValidation = z.object({
     name: z.string({ message: "Company Name can't be empty" }),
     companyTitle: z.string({ message: "Title can't be empty" }),
     experienceDescription: z.array(z.string()).min(1, { message: "Description should contain atleast one point" }),
-    employmentType: z.enum(EmploymentType)
+    employmentType: z.enum(EmploymentType),
+    isCurrent: z.boolean({ message: "Current Type should be boolean type" })
 })

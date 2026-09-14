@@ -22,6 +22,9 @@ export const GET = asyncHandler(async (req: NextRequest) => {
     const normalResume = await prisma.normalResume.findMany({
         where: {
             ownerId: user.id
+        },
+        orderBy: {
+            updatedAt: "desc"
         }
     })
 
@@ -32,6 +35,9 @@ export const GET = asyncHandler(async (req: NextRequest) => {
     const aiTailoredResume = await prisma.aiTailoredResume.findMany({
         where: {
             ownerId: user.id
+        },
+        orderBy: {
+            updatedAt: "desc"
         }
     })
 

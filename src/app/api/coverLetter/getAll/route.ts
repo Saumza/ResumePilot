@@ -20,6 +20,9 @@ export const GET = asyncHandler(async (request: NextRequest) => {
     const allCoverLetters = await prisma.coverLetter.findMany({
         where: {
             ownerId: user.id
+        },
+        orderBy: {
+            updatedAt: "desc"
         }
     })
 

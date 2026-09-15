@@ -1,14 +1,40 @@
 import { Redis } from "ioredis"
 
-export const redisConnection = new Redis({
-    host: process.env.REDIS_URL,
-    maxRetriesPerRequest: null
-})
+const globalforRedis = globalThis as unknown as { redis: Redis }
 
-redisConnection.on("connect", () => {
-    console.log("Redis Connected")
-})
+let redisClient: Redis
 
-redisConnection.on("error", (err) => {
-    console.log(`Redis Err: ${err}`)
-})
+if (process.env.NODE_ENV === "production") {
+    redisClient = new Redis({
+        host: process.env.REDIS_URL,
+        maxRetriesPerRequest: null
+    })
+
+    redisClient.on("connect", () => {
+        console.log("Redis Connected")
+    })
+
+    redisClient.on("error", (err) => {
+        console.log(`Redis Err: ${err}`)
+    })
+}
+
+else {
+    if (!globalforRedis.redis) {
+        globalforRedis.redis = new Redis({
+            host: process.env.REDIS_URL,
+            maxRetriesPerRequest: null
+        })
+    }
+    redisClient = globalforRedis.redis
+
+    redisClient.on("connect", () => {
+        console.log("Redis Connected")
+    })
+
+    redisClient.on("error", (err) => {
+        console.log(`Redis Err: ${err}`)
+    })
+}
+
+export { redisClient }

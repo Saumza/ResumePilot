@@ -5,8 +5,7 @@ const globalforRedis = globalThis as unknown as { redis: Redis }
 let redisClient: Redis
 
 if (process.env.NODE_ENV === "production") {
-    redisClient = new Redis({
-        host: process.env.REDIS_URL,
+    redisClient = new Redis(process.env.REDIS_URL!, {
         maxRetriesPerRequest: null
     })
 
@@ -21,8 +20,7 @@ if (process.env.NODE_ENV === "production") {
 
 else {
     if (!globalforRedis.redis) {
-        globalforRedis.redis = new Redis({
-            host: process.env.REDIS_URL,
+        globalforRedis.redis = new Redis(process.env.REDIS_URL!,{
             maxRetriesPerRequest: null
         })
     }

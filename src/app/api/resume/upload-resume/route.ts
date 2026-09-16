@@ -10,6 +10,8 @@ import { uploadOnCloudinary } from "@/utils/cloudinary";
 import { getServerSession, User } from "next-auth";
 import { authOption } from "../../auth/[...nextauth]/option";
 import { textToJson } from "@/helpers/pdfTextToJson";
+import { checkUploadRateLimiter } from "@/lib/rate-limiting/uploadRateLimiter";
+import { ipAddress } from "@/helpers/ipAddress";
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {
@@ -21,9 +23,33 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     const user: User = session?.user as User
 
+    const ip = ipAddress(request)
+    const data = await checkUploadRateLimiter(ip)
+
+    if (!data.allowed) {
+        const error = {
+            errorMessage: "Too many request! Please try again later",
+            limit: data.limit,
+            remaining: data.remaining,
+            retryAfter: data.retryAfter
+        }
+
+        return NextResponse.json(
+            error,
+            {
+                status: 429,
+                headers: {
+                    'X-RateLimit-Limit': String(data.limit),
+                    'X-RateLimit-Remaining': String(data.remaining),
+                    'X-RateLimit-Reset': String(data.retryAfter)
+                }
+            }
+        )
+    }
+
     const formData = await request.formData()
     const file = formData.get("file") as File | null
-    
+
     if (file?.size === 0) {
         throw new ApiError(404, "Pdf file is Required")
     }
@@ -44,12 +70,12 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         throw new ApiError(400, "PDF is either empty or appears to be scanned. Please upload text-based PDF")
     }
 
-    const resumeUpload = await uploadOnCloudinary(fileData)
 
     const resumeInformation = text.split("\n")
     const stringResumeInfo = JSON.stringify(resumeInformation)
 
     const resumeData = await textToJson(text)
+    const resumeUpload = await uploadOnCloudinary(fileData)
 
     const resume = await prisma.normalResume.create({
         data: {
@@ -62,6 +88,13 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     })
 
     return NextResponse.json(
-        new ApiResponse(201, { resume }, "Resume Saved Successfully")
+        new ApiResponse(201, { resume }, "Resume Saved Successfully"),
+        {
+            headers: {
+                'X-RateLimit-Limit': String(data.limit),
+                'X-RateLimit-Remaining': String(data.remaining),
+                'X-RateLimit-Reset': String(data.retryAfter)
+            }
+        }
     )
 })

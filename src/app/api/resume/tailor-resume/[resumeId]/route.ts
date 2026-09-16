@@ -5,24 +5,51 @@ import { getServerSession, User } from "next-auth";
 import { ApiError } from "@/utils/ApiError";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod"
-import { authOption } from "../../auth/[...nextauth]/option";
+import { authOption } from "../../../auth/[...nextauth]/option";
 import { resumeTailor, resumeTailorwithDescription } from "@/validations/resumeTailoring.validation";
 import { tailorInstructions, tailorPrompt } from "@/lib/constants/resume.tailor";
 import { aiApi } from "@/helpers/googleAi";
 import { aiTextToJson } from "@/helpers/pdfTextToJson";
+import { ipAddress } from "@/helpers/ipAddress";
+import { aiFeatureRateLimiter } from "@/lib/rate-limiting/scoringAndTailoringRateLimiting";
 
 
-export const POST = asyncHandler(async (request: NextRequest) => {
+export const POST = asyncHandler(async (request: NextRequest, { params }: { params: Promise<{ resumeId: string }> }) => {
 
     const session = await getServerSession(authOption)
 
     if (!session || !session.user) {
         throw new ApiError(401, "Session Not Available")
     }
-
     const user: User = session.user as User
 
-    const { resumeId, jobId, description } = await request.json()
+    const ip = ipAddress(request)
+    const data = await aiFeatureRateLimiter(ip)
+
+    if (!data.allowed) {
+
+        const error = {
+            message: "Too many requests! Please try again later.",
+            allowed: data.allowed,
+            remaining: data.remaining,
+            retryAfter: data.retryAfter
+        }
+        return NextResponse.json(
+            error,
+            {
+                status: 429,
+                headers: {
+                    'X-RateLimit-Limit': String(data.limit),
+                    'X-RateLimit-Remaining': String(data.remaining),
+                    'X-RateLimit-Reset': String(data.retryAfter)
+                }
+            }
+        )
+
+    }
+
+    const { resumeId } = await params
+    const { jobId, description } = await request.json()
 
     if (description) {
 
@@ -134,7 +161,15 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     })
 
     return NextResponse.json(
-        new ApiResponse(200, tailoredResumeUpload, "Resume Tailored Successfully")
+        new ApiResponse(200, tailoredResumeUpload, "Resume Tailored Successfully"),
+        {
+            status: 200,
+            headers: {
+                'X-RateLimit-Limit': String(data.limit),
+                'X-RateLimit-Remaining': String(data.remaining),
+                'X-RateLimit-Reset': String(data.retryAfter)
+            }
+        }
     )
 
 })

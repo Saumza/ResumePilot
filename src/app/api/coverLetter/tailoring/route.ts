@@ -10,6 +10,8 @@ import { instructionsForDescriptions, instructionsWithoutDescriptions, role, tai
 import { aiApi } from "@/helpers/googleAi";
 import { aiTextToJson } from "@/helpers/pdfTextToJson";
 import { prisma } from "@/lib/prisma";
+import { ipAddress } from "@/helpers/ipAddress";
+import { aiFeatureRateLimiter } from "@/lib/rate-limiting/scoringAndTailoringRateLimiting";
 
 
 export const POST = asyncHandler(async (request: NextRequest) => {
@@ -20,8 +22,30 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         throw new ApiError(401, "Session Unavailable. Please Login First")
     }
 
-    const user: User = session.user as User
+    const ip = ipAddress(request)
+    const data = await aiFeatureRateLimiter(ip)
 
+    if (!data.allowed) {
+        const error = {
+            message: "Too many requests! Please try again later.",
+            allowed: data.allowed,
+            remaining: data.remaining,
+            retryAfter: data.retryAfter
+        }
+        return NextResponse.json(
+            error,
+            {
+                status: 429,
+                headers: {
+                    'X-RateLimit-Limit': String(data.limit),
+                    'X-RateLimit-Remaining': String(data.remaining),
+                    'X-RateLimit-Reset': String(data.retryAfter)
+                }
+            }
+        )
+    }
+
+    const user: User = session.user as User
     const { resumeId, companyName, position, tone, jobDescription, jobId } = await request.json()
 
     const verifyValidation = {
@@ -67,7 +91,15 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         })
 
         return NextResponse.json(
-            new ApiResponse(201, uploadCoverLetter, "CoverLetter Tailored Successfully")
+            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully"),
+            {
+                status: 200,
+                headers: {
+                    'X-RateLimit-Limit': String(data.limit),
+                    'X-RateLimit-Remaining': String(data.remaining),
+                    'X-RateLimit-Reset': String(data.retryAfter)
+                }
+            }
         )
     }
 
@@ -101,7 +133,15 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         })
 
         return NextResponse.json(
-            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully")
+            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully"),
+            {
+                status: 200,
+                headers: {
+                    'X-RateLimit-Limit': String(data.limit),
+                    'X-RateLimit-Remaining': String(data.remaining),
+                    'X-RateLimit-Reset': String(data.retryAfter)
+                }
+            }
         )
     }
 
@@ -122,7 +162,15 @@ export const POST = asyncHandler(async (request: NextRequest) => {
         })
 
         return NextResponse.json(
-            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully")
+            new ApiResponse(200, uploadCoverLetter, "CoverLetter Tailored Successfully"),
+            {
+                status: 200,
+                headers: {
+                    'X-RateLimit-Limit': String(data.limit),
+                    'X-RateLimit-Remaining': String(data.remaining),
+                    'X-RateLimit-Reset': String(data.retryAfter)
+                }
+            }
         )
     }
 })

@@ -28,7 +28,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
 
     if (!data.allowed) {
         const error = {
-            errorMessage: "Too many request! Please try again later",
+            message: "Too many request! Please try again later",
             limit: data.limit,
             remaining: data.remaining,
             retryAfter: data.retryAfter

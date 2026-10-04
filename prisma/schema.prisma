@@ -135,15 +135,14 @@ model Education {
 
 model Job {
   id                String             @id @default(uuid()) @db.Uuid
-  externalJobId     String
+  externalJobId     String             @unique
   companyName       String             @db.VarChar(50)
   title             String             @db.VarChar(30)
-  description       Json
+  description       String
   location          String             @db.VarChar(100)
   sourceUrl         String
-  jobType           JobType
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  jobType           JobType?
+  createdAt         DateTime           @db.Timestamptz(0)
   savedJobs         SavedJobs[]
   applications      Application[]
   aiTailoredResumes AiTailoredResume[]

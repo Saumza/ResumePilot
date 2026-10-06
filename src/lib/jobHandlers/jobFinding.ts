@@ -36,6 +36,7 @@ interface apiJobType {
 export const jobFind = async (job: Job) => {
     const allJobs: jobs[] = []
 
+    const startTime = Date.now()
     const countries = ["gb", "us", "in", "ca", "de"]
     const categories = ["it-jobs", "engineering-jobs", "graduate-jobs"]
     const maxPage = 1
@@ -72,8 +73,10 @@ export const jobFind = async (job: Job) => {
             skipDuplicates: true   //for idempotency if worker fails or crashes then the repeated data won't be saved in db
         })
 
-        console.log(`Successfully fetched ${allJobs.length} jobs from Adzuna Api.`)
-        return { success: true }
+        const endTime = (Date.now() - startTime) / 60000
+        console.log(`Successfully fetched jobs from Adzuna Api.`)
+        console.log(`Time taken to complete the task ${endTime}min`)
+        return { success: true, jobsFetched: allJobs.length }
 
     } catch (error: any) {
         if (isAxiosError(error)) {
@@ -87,6 +90,6 @@ export const jobFind = async (job: Job) => {
             }
         }
         console.error(`Error for jobId: ${job.id} for Adzuna Api.`, error.message)
-        throw new RetryableError(error)
+        throw new RetryableError(error.message)
     }
 }

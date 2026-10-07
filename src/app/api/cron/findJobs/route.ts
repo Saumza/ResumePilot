@@ -11,7 +11,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     const cronSecret = process.env.CRON_SECRET
 
     if (!authHeader || authHeader !== `Bearer ${cronSecret}`) {
-        throw new ApiError(401, "Unauthorised")
+        throw new ApiError(401, "Unauthorised Request")
     }
 
     const { triggeredBy } = await request.json()
@@ -24,7 +24,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     const job = await taskQueue.add(
         "finding_job",
         {
-            payload
+            ...payload
         },
         {
             attempts: 3,

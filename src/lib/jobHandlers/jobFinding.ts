@@ -50,14 +50,14 @@ export const jobFind = async (job: Job) => {
         for (const { country, category } of jobMatrix) {
             const jobs: jobs[] = []
             for (let i = 1; i <= maxPage; i++) {
-                const url = `${process.env.ADZUNABASEURL}/${country}/search/${i}?app_id=${process.env.ADZUNAAPPID}&app_key=${process.env.ADZUNAAPPKEY}&category=${category}&results_per_page=50&what_or=software+developer+programmer+ai+devops&sort_by=date&max_days_old=7`
+                const url = `${process.env.ADZUNABASEURL}/${country}/search/${i}?app_id=${process.env.ADZUNAAPPID}&app_key=${process.env.ADZUNAAPPKEY}&category=${category}&results_per_page=50&what_or=software+developer+programmer+ai+devops&sort_by=date&max_days_old=15`
 
                 const response = await axios.get(url)
-                const jobData = response.data as apiJobType[]
+                const jobData = response.data.results as apiJobType[]
 
                 jobs.push(...jobData.map((job) => ({
                     externalJobId: job.id,
-                    companyName: job.company,
+                    companyName: job.company.display_name,
                     title: job.title,
                     description: job.description,
                     location: job.location.display_name,

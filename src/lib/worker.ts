@@ -5,7 +5,7 @@ import { jobFind } from "./jobHandlers/jobFinding";
 import { PermanentError } from "@/utils/PermanentError";
 
 const worker = new Worker(
-    "taskQueue",
+    "tasks",
     async (job: Job) => {
         switch (job.name) {
             case 'finding_job':

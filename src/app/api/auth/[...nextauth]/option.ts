@@ -30,9 +30,9 @@ export const authOption: NextAuthOptions = {
             }
         })
     ],
-    // pages: {
-    //     signIn: "/sign-in"
-    // },
+    pages: {
+        signIn: "/sign-in"
+    },
     callbacks: {
         // LATER FEATURE write the signIn callback later for the OAuth Login for the Onboarding Page when for the 1st time signup users and using account params in signin to check provider github and get the user github URL and save it in the DB. Either do it in signin callback or in the githubprovider profile callback and send back the details in objects like email:profile.email,etc.
 

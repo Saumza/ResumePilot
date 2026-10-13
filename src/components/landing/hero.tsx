@@ -33,10 +33,7 @@ export function Hero() {
                     </p>
                     <div className="mt-9 flex flex-wrap justify-center gap-3">
                         <Button asChild size="lg" className="bg-accent text-on-accent hover:brightness-110">
-                            <Link href="/signin">Get started</Link>
-                        </Button>
-                        <Button asChild size="lg" variant="ghost" className="text-foreground hover:bg-transparent hover:text-accent-text">
-                            <Link href="#features">See how it works</Link>
+                            <Link href="/sign-in" className="text-[18px] font-medium">Get started</Link>
                         </Button>
                     </div>
                 </div>

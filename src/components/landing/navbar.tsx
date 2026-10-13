@@ -32,7 +32,7 @@ export function Navbar() {
           variant="outline"
           className="h-9 border-accent bg-transparent text-accent-text hover:bg-accent-soft hover:text-accent-text"
         >
-          <Link href="/signin">Sign in</Link>
+          <Link href="/sign-in">Sign in</Link>
         </Button>
       </div>
     </header>

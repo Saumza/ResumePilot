@@ -14,7 +14,7 @@ export function FinalCta() {
                     </p>
                     <div className="mt-8">
                         <Button asChild size="lg" className="animate-glow bg-accent text-on-accent hover:brightness-110">
-                            <Link href="/signin">Get started</Link>
+                            <Link href="/sign-in">Get started</Link>
                         </Button>
                     </div>
                 </div>

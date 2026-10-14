@@ -17,7 +17,7 @@ export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: P
         throw new ApiError(401, "User Not Available. Please Login First")
     }
 
-    const { startDate, endDate, companyName, title, description, type, current } = await req.json()
+    const { startDate, endDate, companyName, title, description, type } = await req.json()
 
     const { experienceId } = await params
 
@@ -28,8 +28,7 @@ export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: P
         name: companyName,
         companyTitle: title,
         experienceDescription: description,
-        employmentType: type,
-        isCurrent: current
+        employmentType: type
     }
 
     const result = addExperienceValidation.safeParse(checkExperienceData)
@@ -39,7 +38,7 @@ export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: P
         throw new ApiError(400, codeError.fieldErrors)
     }
 
-    const { startYear, endYear, name, companyTitle, experienceDescription, employmentType, isCurrent } = result.data
+    const { startYear, endYear, name, companyTitle, experienceDescription, employmentType } = result.data
 
     const data = await prisma.experience.update({
         where: {
@@ -51,8 +50,7 @@ export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: P
             companyName: name,
             title: companyTitle,
             description: experienceDescription,
-            employmentType: employmentType,
-            isCurrent
+            employmentType: employmentType
         }
     })
 

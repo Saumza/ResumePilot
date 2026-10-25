@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
     }) : null
 
     const isLoggedIn = !!session && session.expires > new Date()
-    const publicRoutes = ["/", "/sign-in"]
+    const publicRoutes = ["/sign-in"]
     const isPublicRoute = publicRoutes.some(route => pathname.startsWith(route))
 
     if (isLoggedIn && isPublicRoute) {
@@ -29,7 +29,6 @@ export async function proxy(request: NextRequest) {
 // add more routes as we add more pages in the frontend!
 export const config = {
     matcher: [
-        "/",
         "/sign-in",
         "/home"
     ]

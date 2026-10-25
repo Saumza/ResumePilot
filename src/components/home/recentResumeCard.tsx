@@ -2,15 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 
-const RESUMES = [
-    { title: "Backend Engineer · Stripe", updated: "Updated 2 days ago", type: "Tailored", score: 88 },
-    { title: "ML Engineer · Anthropic", updated: "Updated 3 days ago", type: "Tailored", score: 90 },
-    { title: "Base resume", updated: "Updated 1 week ago", type: "Base", score: 82 },
-];
+export function RecentResumesCard() {
 
-export function RecentResumesCard({ className }: { className?: string }) {
+
+    const RESUMES = [
+        { title: "Backend Engineer · Stripe", updated: "Updated 2 days ago", type: "Tailored", score: 88 },
+        { title: "ML Engineer · Anthropic", updated: "Updated 3 days ago", type: "Tailored", score: 90 },
+        { title: "Base resume", updated: "Updated 1 week ago", type: "Base", score: 82 },
+    ];
+
+    
     return (
-        <Card className={`border-border bg-surface shadow-none ${className ?? ""}`}>
+        <Card className={`border-border bg-surface shadow-none lg:col-span-7`}>
             <CardHeader className="flex-row items-center justify-between space-y-0">
                 <CardTitle className="heading-3">Recent resumes</CardTitle>
                 <Link href="/applications" className="inline-flex items-center gap-1 text-sm font-medium text-accent-text hover:underline">

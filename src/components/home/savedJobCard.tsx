@@ -9,8 +9,9 @@ export function SavedJobsCard() {
         { role: "AI Engineer", company: "Notion", posted: "5d ago" },
         { role: "Backend Engineer", company: "Linear", posted: "1w ago" },
     ].slice(0, 4); // max 4
+    
     return (
-        <Card className={`border-border bg-surface shadow-none`}>
+        <Card className={`border-border bg-surface shadow-none lg:col-span-5`}>
             <CardHeader className="flex-row items-center justify-between space-y-0">
                 <CardTitle className="heading-3">Saved jobs</CardTitle>
                 <Link href="/applications" className="inline-flex items-center gap-1 text-sm font-medium text-accent-text hover:underline">

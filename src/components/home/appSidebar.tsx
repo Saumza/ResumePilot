@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, FileText, Briefcase, KanbanSquare, User, Settings, LogOut } from "lucide-react";
+import { Home, FileText, Briefcase, KanbanSquare, User as UserIcon, Settings, LogOut } from "lucide-react";
 import { Sidebar, SidebarHeader, SidebarContent, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarRail, SidebarTrigger } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { signOut } from "next-auth/react";
+import { User } from "next-auth";
+import { signOut, useSession } from "next-auth/react";
 
 export function AppSidebar() {
     const NAV = [
@@ -14,10 +15,14 @@ export function AppSidebar() {
         { title: "Documents", href: "/documents", icon: FileText },
         { title: "Jobs", href: "/jobs", icon: Briefcase },
         { title: "Applications", href: "/applications", icon: KanbanSquare },
-        { title: "Profile", href: "/profile", icon: User },
+        { title: "Profile", href: "/profile", icon: UserIcon },
     ];
 
     const pathname = usePathname();
+
+    const { data: session, status } = useSession()
+    const user: User = session?.user as User
+
     return (
         <Sidebar collapsible="icon" className="border-r border-border bg-surface">
             <SidebarHeader className="px-3 py-4">
@@ -45,7 +50,7 @@ export function AppSidebar() {
                                     className="data-[active=true]:bg-accent-soft data-[active=true]:text-accent-text"
                                 >
                                     <Link href={item.href}>
-                                        <item.icon className="!size-5" strokeWidth={1.6} />
+                                        <item.icon className="size-5!" strokeWidth={1.6} />
                                         <span>{item.title}</span>
                                     </Link>
                                 </SidebarMenuButton>
@@ -68,8 +73,8 @@ export function AppSidebar() {
                     {/* use the useSession context provider to get the userData! */}
                     <div className="flex items-center gap-2.5">
                         <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-foreground">username</p>
-                            <p className="truncate text-xs text-muted">email</p>
+                            <p className="truncate text-sm font-semibold text-foreground">{status === "loading" ? "" : user.name}</p>
+                            <p className="truncate text-xs text-muted">{status === "loading" ? "" : user.email}</p>
                         </div>
                     </div>
                     <Button

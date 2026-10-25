@@ -1,5 +1,7 @@
 import { ApplicationsCard } from "@/components/home/applicationsCard";
 import { AtsSummaryCard } from "@/components/home/atsSummaryCard";
+import { RecentResumesCard } from "@/components/home/recentResumeCard";
+import { SavedJobsCard } from "@/components/home/savedJobCard";
 
 export default function HomePage() {
     return (
@@ -11,8 +13,8 @@ export default function HomePage() {
             <div className="mt-7 grid grid-cols-1 gap-6 lg:grid-cols-12">
                 <ApplicationsCard />
                 <AtsSummaryCard />
-                {/* <RecentResumesCard className="lg:col-span-7" /> */}
-                {/* <SavedJobsCard className="lg:col-span-5" /> */}
+                <RecentResumesCard />
+                <SavedJobsCard />
             </div>
         </div>
     );

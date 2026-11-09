@@ -2,7 +2,7 @@ export interface normalResume {
     id: string;
     name: string | null;
     ownerId: string;
-    resumeText: any;
+    resumeData: any;
     resumeUrl: string;
     publicId: string;
     aiReviewed: boolean;

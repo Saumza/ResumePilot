@@ -1,4 +1,4 @@
-class ApiResponse {
+export class ApiResponse {
     public status: number
     public data: any
     public message: string
@@ -9,4 +9,8 @@ class ApiResponse {
     }
 }
 
-export { ApiResponse }
+export interface APIResponse {
+    status: number,
+    message: string,
+    data: any
+}

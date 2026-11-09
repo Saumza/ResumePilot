@@ -80,7 +80,7 @@ export const POST = asyncHandler(async (request: NextRequest) => {
     const resume = await prisma.normalResume.create({
         data: {
             ownerId: user.id,
-            resumeText: resumeData,
+            resumeData,
             rawText: stringResumeInfo,
             resumeUrl: resumeUpload.url,
             publicId: resumeUpload.public_id

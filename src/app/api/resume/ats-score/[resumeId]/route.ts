@@ -16,7 +16,7 @@ import { aiFeatureRateLimiter } from "@/lib/rate-limiting/scoringAndTailoringRat
 
 export const PUT = asyncHandler(async (request: NextRequest, { params }: { params: Promise<{ resumeId: string }> }) => {
 
-
+// add type for base and tailored resume for both resume types
     const session = await getServerSession(authOption)
     if (!session || !session.user) {
         throw new ApiError(401, "Session Unavailable. Login First")
@@ -61,7 +61,9 @@ export const PUT = asyncHandler(async (request: NextRequest, { params }: { param
     const checkedResumeId = result.data.resumeId
 
     const findResume = await prisma.normalResume.findFirst({
-        where: { id: checkedResumeId }
+        where: {
+            id: resumeId
+        }
     })
 
     if (!findResume) {
@@ -69,7 +71,7 @@ export const PUT = asyncHandler(async (request: NextRequest, { params }: { param
     }
 
 
-    const resumeInfo = JSON.stringify(findResume.resumeText)
+    const resumeInfo = JSON.stringify(findResume.resumeData)
 
     let instruction
     let prompt

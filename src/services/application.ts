@@ -12,7 +12,7 @@ class application {
 
     async getApplications<T>() {
         try {
-            return await axios.get<T>(`api/applications/get-applications`)
+            return await axios.get<T>(`api/application/get-applications`)
         } catch (error) {
             throw error
         }
@@ -20,7 +20,7 @@ class application {
 
     async updateApplication<T>(applicationId: string, status: string) {
         try {
-            return await axios.patch<T>(`api/applications/update-application-status/${applicationId}`, { status })
+            return await axios.patch<T>(`api/application/update-application-status/${applicationId}`, { status })
         } catch (error) {
             throw error
 

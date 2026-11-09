@@ -23,7 +23,7 @@ export const PUT = asyncHandler(async (request: NextRequest, { params }: { param
         throw new ApiError(400, "Resume Data and ResumeId  both are required")
     }
 
-    if (type === "normal") {
+    if (type === "base") {
 
         const resumeUpdate = await prisma.normalResume.update({
             where: {
@@ -31,7 +31,7 @@ export const PUT = asyncHandler(async (request: NextRequest, { params }: { param
                 ownerId: user.id
             },
             data: {
-                resumeText: resumeData
+                resumeData
             }
         })
 

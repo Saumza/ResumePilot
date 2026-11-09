@@ -25,7 +25,7 @@ export const PUT = asyncHandler(async (req: NextRequest, { params }: { params: P
     }
 
 
-    if (type === "normal") {
+    if (type === "base") {
         const updatedResume = await prisma.normalResume.update({
             where: {
                 id: resumeId,

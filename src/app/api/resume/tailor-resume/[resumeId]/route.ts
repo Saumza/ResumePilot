@@ -78,7 +78,7 @@ export const POST = asyncHandler(async (request: NextRequest, { params }: { para
             throw new ApiError(404, "Resume Not Found")
         }
 
-        const resumeInfo = JSON.stringify(findResume.resumeText)
+        const resumeInfo = JSON.stringify(findResume.resumeData)
 
         const instructions = tailorInstructions
         const prompt = tailorPrompt(resumeInfo, jobDescription)
@@ -87,7 +87,7 @@ export const POST = asyncHandler(async (request: NextRequest, { params }: { para
 
         const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
 
-        const tailoredResume = { ...findResume.resumeText as Record<string, any>, ...parsedResponse.modifiedSections, }
+        const tailoredResume = { ...findResume.resumeData as Record<string, any>, ...parsedResponse.modifiedSections, }
         const tailoredResumeUpload = await prisma.aiTailoredResume.create({
             data: {
                 ownerId: user.id,
@@ -129,7 +129,7 @@ export const POST = asyncHandler(async (request: NextRequest, { params }: { para
         throw new ApiError(404, "Resume Not Found")
     }
 
-    const resumeInfo = JSON.stringify(findResume.resumeText)
+    const resumeInfo = JSON.stringify(findResume.resumeData)
 
     const findJob = await prisma.job.findFirst({
         where: {
@@ -149,7 +149,7 @@ export const POST = asyncHandler(async (request: NextRequest, { params }: { para
     const parsedResponse: Record<string, any> = aiTextToJson(response) || {}
 
 
-    const tailoredResume = { ...findResume.resumeText as Record<string, any>, ...parsedResponse.modifiedSections }
+    const tailoredResume = { ...findResume.resumeData as Record<string, any>, ...parsedResponse.modifiedSections }
     const tailoredResumeUpload = await prisma.aiTailoredResume.create({
         data: {
             ownerId: user.id,

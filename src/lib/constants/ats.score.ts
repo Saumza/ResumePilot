@@ -29,42 +29,42 @@ export const atsInstructions = {
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Projects: {
+                                projects: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Education : {
+                                education : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
@@ -81,35 +81,35 @@ export const atsInstructions = {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Projects: {
+                                projects: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Education :{
+                                education :{
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
@@ -150,42 +150,42 @@ export const atsInstructions = {
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Projects: {
+                                projects: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Education : {
+                                education : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
@@ -202,35 +202,35 @@ export const atsInstructions = {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Projects: {
+                                projects: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Education :{
+                                education :{
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
@@ -271,42 +271,42 @@ export const atsInstructions = {
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Projects: {
+                                projects: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Education : {
+                                education : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
@@ -323,35 +323,35 @@ export const atsInstructions = {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Projects: {
+                                projects: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Education :{
+                                education :{
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
@@ -392,42 +392,42 @@ export const atsInstructions = {
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Projects: {
+                                projects: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Education : {
+                                education : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
@@ -444,35 +444,35 @@ export const atsInstructions = {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Projects: {
+                                projects: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Education :{
+                                education :{
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
@@ -513,42 +513,42 @@ export const atsInstructions = {
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Projects: {
+                                projects: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Education : {
+                                education : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Github/Portfolio Visibility : {
+                                portfolioVisibility : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             score: number, 
                                                             feedback- string with 2-3 lines,
                                                             improvementSuggestion- array of strings 2-3 suggestions 
@@ -565,35 +565,35 @@ export const atsInstructions = {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Projects: {
+                                projects: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Content Quality: {
+                                contentQuality: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Skills-to-Experience: {
+                                skillsToExperience: {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Application Readiness : {
+                                applicationReadiness : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Education :{
+                                education :{
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Github/Portfolio Visibility : {
+                                applicationReadiness : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Contact information : {
+                                contactInformation : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
-                                Overall Consistency & Readability : {
+                                overallConsistencyAndReadability : {
                                                             weight: number, 
                                                             scoreAwarded: number
                                                                         },
